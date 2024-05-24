@@ -1,0 +1,17 @@
+{
+  "1.0.0": {
+    "en": "Initial release"
+  },
+  "1.0.1": {
+    "en": "Added better marketing images"
+  },
+  "1.0.2": {
+    "en": "Fix cards not being triggert"
+  },
+  "1.0.3": {
+    "en": "Fixed deleting device error"
+  },
+  "1.0.4": {
+    "en": "Opensource app"
+  }
+}

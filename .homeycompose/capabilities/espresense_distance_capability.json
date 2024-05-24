@@ -1,0 +1,9 @@
+{
+  "type": "number",
+  "title": { "en": "Distance" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "units": { "en": "m" },
+  "icon": "assets/icons/ruler.svg"
+}

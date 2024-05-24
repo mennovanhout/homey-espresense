@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "title": { "en": "Room" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "icon": "assets/icons/room.svg",
+  "insights": true
+}

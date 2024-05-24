@@ -1,0 +1,84 @@
+{
+  "triggers": [
+    {
+      "id": "when-device-is-closer-than-x-meters",
+      "title": {
+        "en": "When device is closer than x meters"
+      },
+      "titleFormatted": {
+        "en": "When device [[deviceId]] is closer than [[distance]] meters"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "deviceId",
+          "placeholder": {
+            "en": "device"
+          }
+        },
+        {
+          "type": "number",
+          "name": "distance",
+          "placeholder": {
+            "en": "distance"
+          },
+          "min": 0,
+          "max": 16,
+          "step": 0.01
+        }
+      ],
+      "tokens": [
+        {
+          "type": "number",
+          "name": "device-distance",
+          "title": {
+            "en": "Device distance"
+          },
+          "example": {
+            "en": "1.2"
+          }
+        }
+      ]
+    },
+    {
+      "id": "when-device-is-further-than-x-meters",
+      "title": {
+        "en": "When device is further than x meters"
+      },
+      "titleFormatted": {
+        "en": "When device [[deviceId]] is further than [[distance]] meters"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "deviceId",
+          "placeholder": {
+            "en": "device"
+          }
+        },
+        {
+          "type": "number",
+          "name": "distance",
+          "placeholder": {
+            "en": "distance"
+          },
+          "min": 0,
+          "max": 16,
+          "step": 0.01
+        }
+      ],
+      "tokens": [
+        {
+          "type": "number",
+          "name": "device-distance",
+          "title": {
+            "en": "Device distance"
+          },
+          "example": {
+            "en": "1.2"
+          }
+        }
+      ]
+    }
+  ]
+}

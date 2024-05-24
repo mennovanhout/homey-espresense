@@ -1,0 +1,18 @@
+{
+  "type": "enum",
+  "title": { "en": "Status" },
+  "uiComponent": "sensor",
+  "getable": true,
+  "setable": false,
+  "icon": "assets/icons/globe.svg",
+  "values": [
+    {
+      "id": "online",
+      "title": { "en": "Online" }
+    },
+    {
+      "id": "offline",
+      "title": { "en": "Offline" }
+    }
+  ]
+}

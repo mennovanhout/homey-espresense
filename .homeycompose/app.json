@@ -1,0 +1,40 @@
+{
+  "id": "nl.mennovanhout.espresense",
+  "version": "1.0.4",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "ESPresense"
+  },
+  "description": {
+    "en": "Make personalised flows with ESPresense"
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Menno van Hout",
+    "email": "menno.vanhout@gmail.com"
+  },
+  "brandColor": "#000000",
+  "homepage": "https://hdashboards.app",
+  "support": "https://hdashboards.app",
+  "source": "https://github.com/mennovanhout/homey-espresense",
+  "contributing": {
+    "donate": {
+      "bunq": {
+        "username": "mennovanhout"
+      }
+    }
+  },
+  "homeyCommunityTopicId": 94742
+}

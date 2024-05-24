@@ -1,0 +1,153 @@
+<head>
+    <script
+            type="text/javascript"
+            src="/homey.js"
+            data-origin="settings"
+    ></script>
+</head>
+<body>
+<header class="homey-header">
+    <h1 class="homey-title">
+        ESPresense settings
+    </h1>
+    <fieldset class="homey-form-fieldset">
+        <legend class="homey-form-legend">MQTT</legend>
+
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="server">Server</label>
+            <input class="homey-form-input" id="server" type="text" value="" />
+        </div>
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="port">Port</label>
+            <input class="homey-form-input" id="port" type="text" value="" />
+        </div>
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="username">Username</label>
+            <input class="homey-form-input" id="username" type="text" value="" />
+        </div>
+        <div class="homey-form-group">
+            <label class="homey-form-label" for="password">Password</label>
+            <input class="homey-form-input" id="password" type="password" value="" />
+        </div>
+
+        <legend class="homey-form-legend">Mapping</legend>
+        <div class="mappings">
+            <div class="entry">
+                <div class="homey-form-group">
+                    <label class="homey-form-label">ESPresense ID</label>
+                    <input class="homey-form-input espresense_id" type="text" value="" />
+                </div>
+                <div class="homey-form-group">
+                    <label class="homey-form-label">Usable name</label>
+                    <input class="homey-form-input usable_name" type="text" value="" />
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <button id="add_mapping" class="homey-button-secondary-full">Add mapping</button>
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+</header>
+<script type="text/javascript">
+  function onHomeyReady(Homey) {
+    Homey.ready();
+
+    // Get elements
+    const mappingsElement = document.querySelector(".mappings");
+    const serverElement = document.getElementById("server");
+    const portElement = document.getElementById('port');
+    const usernameElement = document.getElementById("username");
+    const passwordElement = document.getElementById("password");
+    const saveElement = document.getElementById("save");
+    const addMappingElement = document.getElementById("add_mapping");
+
+    // Fill settings
+    Homey.get("server", function (err, server) {
+      if (err) return Homey.alert(err);
+      serverElement.value = server;
+    });
+
+    Homey.get("port", function (err, port) {
+      if (err) return Homey.alert(err);
+      portElement.value = port;
+    });
+
+    Homey.get("username", function (err, username) {
+      if (err) return Homey.alert(err);
+      usernameElement.value = username;
+    });
+
+    Homey.get("password", function (err, password) {
+      if (err) return Homey.alert(err);
+      passwordElement.value = password;
+    });
+
+    // Fill in mapping
+    Homey.get("mapping", function (err, mapping) {
+      if (err) return Homey.alert(err);
+
+      if (mapping === undefined || mapping === null) {
+        return;
+      }
+
+      Object.keys(mapping).forEach(function (value, index) {
+        mappingsElement.insertAdjacentHTML( 'afterbegin', '<div class="entry"><div class="homey-form-group">\n' +
+          '                <label class="homey-form-label">ESPresense ID</label>\n' +
+          '                <input class="homey-form-input espresense_id" type="text" value="'+value+'" />\n' +
+          '            </div>\n' +
+          '            <div class="homey-form-group">\n' +
+          '                <label class="homey-form-label">Usable name</label>\n' +
+          '                <input class="homey-form-input usable_name" type="text" value="'+mapping[value]+'" />\n' +
+          '            </div></div>' );
+      });
+    });
+
+    // Add mapping button
+    addMappingElement.addEventListener("click", function (e) {
+      mappingsElement.insertAdjacentHTML( 'beforeend', '<div class="entry"><div class="homey-form-group">\n' +
+        '                <label class="homey-form-label">ESPresense ID</label>\n' +
+        '                <input class="homey-form-input espresense_id" type="text" value="" />\n' +
+        '            </div>\n' +
+        '            <div class="homey-form-group">\n' +
+        '                <label class="homey-form-label">Usable name</label>\n' +
+        '                <input class="homey-form-input usable_name" type="text" value="" />\n' +
+        '            </div></div>' );
+    });
+
+    // Set settings
+    saveElement.addEventListener("click", function (e) {
+      Homey.set("server", serverElement.value, function (err) {
+        if (err) return Homey.alert(err);
+      });
+      Homey.set("port", portElement.value, function (err) {
+        if (err) return Homey.alert(err);
+      });
+      Homey.set("username", usernameElement.value, function (err) {
+        if (err) return Homey.alert(err);
+      });
+      Homey.set("password", passwordElement.value, function (err) {
+        if (err) return Homey.alert(err);
+      });
+
+      // Create and save mapping info
+      const mapping = {};
+
+      mappingsElement.querySelectorAll('.espresense_id').forEach(function (element) {
+        const usableName = element.parentElement.parentElement.querySelector('.usable_name').value;
+
+        if (element.value === '' || usableName === '') {
+          return;
+        }
+
+        mapping[element.value] = usableName;
+      });
+
+      Homey.set("mapping", mapping, function (err) {
+        if (err) return Homey.alert(err);
+      });
+
+      Homey.alert('Settings saved!');
+    });
+  }
+</script>
+</body>

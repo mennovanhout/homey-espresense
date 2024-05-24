@@ -1,0 +1,16 @@
+{
+  "extends": "athom",
+  "rules": {
+    "node/no-unsupported-features/es-syntax": [
+      "error",
+      {
+        "version": ">=13.0.0",
+        "ignores": ["modules"]
+      }
+    ],
+    "import/no-unresolved": "off",
+    "import/no-extraneous-dependencies": "off",
+    "node/no-missing-import": "off",
+    "strict": "off"
+  }
+}
