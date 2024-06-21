@@ -58,7 +58,8 @@ class MyDevice extends Homey.Device {
 
       const json = JSON.parse(message.toString());
       await this.setCapabilityValue(`espresense_distance_capability.${deviceName}`, json.distance);
-
+      await this.setCapabilityOptions(`espresense_distance_capability.${deviceName}`, {title: {"en": `${deviceName}` } });
+      
       // this.log(deviceName);
       // this.log(json.distance);
       // Trigger flow cards
