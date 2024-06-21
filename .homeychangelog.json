@@ -13,5 +13,8 @@
   },
   "1.0.4": {
     "en": "Opensource app"
+  },
+  "1.0.5": {
+    "en": "Add device name in sensor instead of distance"
   }
 }
