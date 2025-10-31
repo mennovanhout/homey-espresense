@@ -8,6 +8,7 @@ class MyDevice extends Homey.Device {
 
   private whenDeviceIsCloserThanXMetersCard: FlowCardTriggerDevice|undefined;
   private whenDeviceIsFurtherThanXMetersCard: FlowCardTriggerDevice|undefined;
+  private whenDeviceIsNoLongerDetectedCard: FlowCardTriggerDevice|undefined;
   private timers: {[key: string]: ReturnType<typeof setTimeout>} = {};
   private connectionLosTimeInSeconds = 30;
 
@@ -21,16 +22,8 @@ class MyDevice extends Homey.Device {
 
     // Flows
     this.whenDeviceIsCloserThanXMetersCard = this.homey.flow.getDeviceTriggerCard('when-device-is-closer-than-x-meters');
-    this.whenDeviceIsCloserThanXMetersCard.registerArgumentAutocompleteListener('deviceId', this.deviceAutocompleteListener.bind(this));
-    this.whenDeviceIsCloserThanXMetersCard.registerRunListener(async (args: any, state: any) => {
-      return state.distance < args.distance && args.deviceId.name === state.deviceId;
-    });
-
     this.whenDeviceIsFurtherThanXMetersCard = this.homey.flow.getDeviceTriggerCard('when-device-is-further-than-x-meters');
-    this.whenDeviceIsFurtherThanXMetersCard.registerArgumentAutocompleteListener('deviceId', this.deviceAutocompleteListener.bind(this));
-    this.whenDeviceIsFurtherThanXMetersCard.registerRunListener(async (args: any, state: any) => {
-      return state.distance > args.distance && args.deviceId.name === state.deviceId;
-    });
+    this.whenDeviceIsNoLongerDetectedCard = this.homey.flow.getDeviceTriggerCard('when-device-is-no-longer-detected');
   }
 
   async messageReceived(topic: any, message: any) {
@@ -93,18 +86,14 @@ class MyDevice extends Homey.Device {
           deviceId: deviceName,
           distance: this.getCapabilityValue('espresense_max_distance_capability'),
         });
+
+        // Run device not responding card
+        await this.whenDeviceIsNoLongerDetectedCard?.trigger(this, undefined, {
+          deviceId: deviceName
+        });
+         
       }, this.connectionLosTimeInSeconds * 1000);
     }
-  }
-
-  async deviceAutocompleteListener(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
-    const names: any = (Object.values(this.homey.settings.get('mapping')) || []).map((name) => {
-      return {
-        name,
-      };
-    });
-
-    return names.filter((result: any) => result.name.toLowerCase().includes(query.toLowerCase()));
   }
 
   /**

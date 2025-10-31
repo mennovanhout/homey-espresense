@@ -79,6 +79,25 @@
           }
         }
       ]
+    },
+    {
+      "id": "when-device-is-no-longer-detected",
+      "title": {
+        "en": "When device is no longer detected"
+      },
+      "titleFormatted": {
+        "en": "When device [[deviceId]] is no longer detected"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "deviceId",
+          "placeholder": {
+            "en": "device"
+          }
+        }
+      ]
     }
+
   ]
 }
