@@ -22,22 +22,8 @@ class MyDevice extends Homey.Device {
 
     // Flows
     this.whenDeviceIsCloserThanXMetersCard = this.homey.flow.getDeviceTriggerCard('when-device-is-closer-than-x-meters');
-    this.whenDeviceIsCloserThanXMetersCard.registerArgumentAutocompleteListener('deviceId', this.deviceAutocompleteListener.bind(this));
-    this.whenDeviceIsCloserThanXMetersCard.registerRunListener(async (args: any, state: any) => {
-      return state.distance < args.distance && args.deviceId.name === state.deviceId;
-    });
-
     this.whenDeviceIsFurtherThanXMetersCard = this.homey.flow.getDeviceTriggerCard('when-device-is-further-than-x-meters');
-    this.whenDeviceIsFurtherThanXMetersCard.registerArgumentAutocompleteListener('deviceId', this.deviceAutocompleteListener.bind(this));
-    this.whenDeviceIsFurtherThanXMetersCard.registerRunListener(async (args: any, state: any) => {
-      return state.distance > args.distance && args.deviceId.name === state.deviceId;
-    });
-
     this.whenDeviceIsNoLongerDetectedCard = this.homey.flow.getDeviceTriggerCard('when-device-is-no-longer-detected');
-    this.whenDeviceIsNoLongerDetectedCard.registerArgumentAutocompleteListener('deviceId', this.deviceAutocompleteListener.bind(this));
-    this.whenDeviceIsNoLongerDetectedCard.registerRunListener(async (args: any, state: any) => {
-      return args.deviceId.name === state.deviceId;
-    });
   }
 
   async messageReceived(topic: any, message: any) {
@@ -108,16 +94,6 @@ class MyDevice extends Homey.Device {
          
       }, this.connectionLosTimeInSeconds * 1000);
     }
-  }
-
-  async deviceAutocompleteListener(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
-    const names: any = (Object.values(this.homey.settings.get('mapping')) || []).map((name) => {
-      return {
-        name,
-      };
-    });
-
-    return names.filter((result: any) => result.name.toLowerCase().includes(query.toLowerCase()));
   }
 
   /**
