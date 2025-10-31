@@ -16,5 +16,8 @@
   },
   "1.0.5": {
     "en": "Add device name in sensor instead of distance"
+  },
+  "1.0.8": {
+    "en": "new flow card"
   }
 }
