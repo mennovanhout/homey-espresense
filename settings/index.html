@@ -147,6 +147,9 @@
       });
 
       Homey.alert('Settings saved!');
+
+      // Trigger saved settings
+      Homey.set('saved', true); 
     });
   }
 </script>
