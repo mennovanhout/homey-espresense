@@ -38,7 +38,7 @@ class ESPresenseNodeDevice extends Homey.Device {
   }
 
   async onRenamed(name: string) {
-    this.client?.updateRoomName(this.roomId, name);
+    this.client?.registerRoom(this.roomId, name);
   }
 
   async register() {
@@ -56,6 +56,25 @@ class ESPresenseNodeDevice extends Homey.Device {
     for (const timer in this.timers) {
       clearTimeout(this.timers[timer]);
     }
+  }
+
+  async cleanUpDevices() {
+    const prefixCapability = 'espresense_distance_capability.'
+    const currentTime = Date.now();
+
+    const capabilities = this.getCapabilities().filter(capability => capability.startsWith(prefixCapability));
+    capabilities.forEach(capability => {
+      const deviceId = capability.replace(prefixCapability, '');
+      const device = this.client?.devices[deviceId];
+
+      if (!device || device.anonymous) {
+        this.removeCapability(capability);
+        this.log('Capability removed for anonymous or unknown device:', capability);
+      } 
+      
+      //const lastChangeTime = this.getCapabilityOptions(capability)?.lastUpdated;
+      //if (currentTime-lastChangeTime > xxx) remove....
+    })
   }
 
   async roomMessageHandler(roomId: string, roomProperty?: string, roomPayload? : string, room? : ESPresenseRoom) {
@@ -88,9 +107,9 @@ class ESPresenseNodeDevice extends Homey.Device {
       return;
     }
 
-    if (device) {
+    // Only display registered devices
+    if (device && !device.anonymous) {
       //this.log("Device:", deviceId, deviceRoomId, "distance:", device.distance);
-
       if (!this.hasCapability(`espresense_distance_capability.${deviceId}`)) {
         await this.addCapability(`espresense_distance_capability.${deviceId}`);
       }
@@ -134,6 +153,9 @@ class ESPresenseNodeDevice extends Homey.Device {
         await this.whenDeviceIsNoLongerDetectedCard?.trigger(this, undefined, {
           deviceId: device.id
         });
+
+        // Device timeout, check devices
+        this.cleanUpDevices();
          
       }, this.connectionLostTimeInSeconds * 1000);
     }

@@ -60,7 +60,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
       deviceName = name;
     }
 
-    this.client?.updateDeviceName(this.deviceId, deviceName);
+    this.client?.registerDevice(this.deviceId, deviceName);
   }
 
   async register() {

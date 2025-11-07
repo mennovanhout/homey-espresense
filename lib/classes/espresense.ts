@@ -54,18 +54,20 @@ export class ESPresenseClient extends MQTTClient {
     this.client?.subscribe('espresense/devices/#');
   }
 
-  public updateRoomName(id: string, name: string) {
+  public registerRoom(id: string, name: string) {
     const room = this.rooms[id];
     if (room) {
       room.name = name;
+      room.anonymous = false;
       this.logMessage(LogLevel.Debug, `Room ${id} renamed to ${room.name}`);
     }
   }
 
-  public updateDeviceName(id: string, name: string) {
+  public registerDevice(id: string, name: string) {
     const device = this.devices[id];
     if (device) {
       device.name = name;
+      device.anonymous = false;
       this.logMessage(LogLevel.Debug, `Device ${id} renamed to ${device.name}`);
     }
   }
@@ -92,8 +94,9 @@ export class ESPresenseClient extends MQTTClient {
     room = this.rooms[roomId];
     if (!room) {
       room = {
-        id : roomId, 
-        name : '' // Empty name, as we know the name
+        id: roomId, 
+        name: '', // Empty name, as we don't know the name yet
+        anonymous: true
       };
       this.rooms[roomId] = room;
       this.logMessage(LogLevel.Debug, `Added room ${roomId}`);
@@ -113,11 +116,14 @@ export class ESPresenseClient extends MQTTClient {
 
     const device = this.devices[deviceId];
     if (!device) {
+      // Add new devices from the MQTT as anonymous
+      deviceObj.anonymous = true;
       this.devices[deviceId] = deviceObj;
       this.logMessage(LogLevel.Debug, `Added device ${deviceId}`);
     } else {
       // Copy additional properties
       deviceObj.name = device.name;
+      deviceObj.anonymous = device.anonymous;
     }
 
     this.emit('deviceMessage', deviceId, deviceRoom, deviceObj);

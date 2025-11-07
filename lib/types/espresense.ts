@@ -2,11 +2,13 @@
 export interface ESPresenseRoom {
   id: string,
   name: string;
+  anonymous: boolean;
 }
 
 export interface ESPresenseDevice {
   id: string,
   name: string,
+  anonymous: boolean;
   idType: number,
   distance: number,
   mac: string,

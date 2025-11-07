@@ -45,7 +45,7 @@ export class ESPresenseApp extends Homey.App {
       const mapping = this.homey.settings.get('mapping');
       if (mapping) {
         for (const key in mapping) {
-          this.client.updateDeviceName(key, mapping[key]);
+          this.client.registerDevice(key, mapping[key]);
         }
       }
 
