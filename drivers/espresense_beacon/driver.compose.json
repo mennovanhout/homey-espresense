@@ -5,7 +5,8 @@
   "class": "other",
   "capabilities": [
     "espresense_beacon_room",
-    "espresense_distance_capability"
+    "espresense_distance_capability",
+    "espresense_status_capability"
   ],
   "platforms": [
     "local"

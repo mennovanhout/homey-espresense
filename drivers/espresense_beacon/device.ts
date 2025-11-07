@@ -10,11 +10,11 @@ class ESPresenseBeaconDevice extends Homey.Device {
   private deviceId! : string;
   private lastseenTimestamp: number = 0;
 
-  private whenDeviceIsNoLongerDetectedCard: FlowCardTriggerDevice|undefined;
+  private whenDeviceIsNoLongerDetectedWithinXMinutesCard: FlowCardTriggerDevice|undefined;
   private whenDeviceIsDetectedAfterXMinutesCard: FlowCardTriggerDevice|undefined;
   
-  private timers: {[key: string]: ReturnType<typeof setTimeout>} = {};
-  private connectionLostTimeInSeconds = 30;
+  private timer?: NodeJS.Timeout;
+  private connectionLostIntervalTimeInSeconds = 30;
 
   private boundDeviceMessageHandler? : DeviceMessageFunction;
   private boundRoomMessageHandler? : RoomMessageFunction;
@@ -28,12 +28,15 @@ class ESPresenseBeaconDevice extends Homey.Device {
     if (!this.hasCapability('espresense_distance_capability')) {
       await this.addCapability('espresense_distance_capability');
     }
+    if (!this.hasCapability('espresense_status_capability')) {
+      await this.addCapability('espresense_status_capability');
+    }
 
     // Store device id for easy access
     this.deviceId = this.getData().id;
 
     // Flows
-    this.whenDeviceIsNoLongerDetectedCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-no-longer-detected');
+    this.whenDeviceIsNoLongerDetectedWithinXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-no-longer-detected');
     this.whenDeviceIsDetectedAfterXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-detected-after-x-minutes');
     
     await this.register();
@@ -72,8 +75,9 @@ class ESPresenseBeaconDevice extends Homey.Device {
     this.client?.off('roomMessage', this.boundRoomMessageHandler);
 
     // Clear all timers
-    for (const timer in this.timers) {
-      clearTimeout(this.timers[timer]);
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
     }
   }
 
@@ -92,6 +96,9 @@ class ESPresenseBeaconDevice extends Homey.Device {
         this.onRenamed(this.getName());
       }
 
+      // We have data, set status online
+      await this.setCapabilityValue('espresense_status_capability', 'online');
+      
       const currentRoomId = await this.getCapabilityValue('espresense_beacon_room');
       const currentDistance = await this.getCapabilityValue('espresense_distance_capability');
 
@@ -99,10 +106,9 @@ class ESPresenseBeaconDevice extends Homey.Device {
         // Same room, update distance
         await this.setCapabilityValue('espresense_distance_capability', device.distance);
         //this.log("Beacon, update distance:", deviceId, deviceRoomId, "distance:", device.distance);
-      } else if (device.distance < currentDistance) {
+      } else if (!currentDistance || device.distance < currentDistance) {
         // Nearest Room
         await this.setCapabilityValue('espresense_beacon_room', deviceRoomId);  
-
         //await this.setCapabilityOptions('espresense_beacon_room', { title: {"en": `${device.name}` } });
 
         await this.setCapabilityValue('espresense_distance_capability', device.distance);
@@ -113,7 +119,14 @@ class ESPresenseBeaconDevice extends Homey.Device {
       const currentTimestamp = Date.now();
       if (this.lastseenTimestamp) {
         const deltaLastseenTimestamp = currentTimestamp - this.lastseenTimestamp;
-        if (deltaLastseenTimestamp > 60*1000) { // minimum of 1 minute
+        let flowDuration = 0;
+
+        const flowArguments = await this.whenDeviceIsDetectedAfterXMinutesCard?.getArgumentValues(this);
+        if (flowArguments && flowArguments.length > 0) {
+          flowDuration = flowArguments[0].duration;
+        }
+
+        if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) { 
            // Run device active again card
            await this.whenDeviceIsDetectedAfterXMinutesCard?.trigger(this, undefined, {
              deviceId: device.id,
@@ -125,21 +138,42 @@ class ESPresenseBeaconDevice extends Homey.Device {
       this.lastseenTimestamp = currentTimestamp
 
       // Add timer for losing connection
-      if (this.timers[device.id]) {
-        clearTimeout(this.timers[device.id]);
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = undefined;
       }
 
-      this.timers[device.id] = setTimeout(async () => {
-        // Remove from object
-        delete this.timers[device.id];
+      this.timer = setInterval(async () => {
+        const currentTimestamp = Date.now();
+        if (this.lastseenTimestamp) {
+          const deltaLastseenTimestamp = currentTimestamp - this.lastseenTimestamp;
 
-        // Run device not responding card
-        await this.whenDeviceIsNoLongerDetectedCard?.trigger(this, undefined, {
-          deviceId: device.id
-        });
-         
-      }, this.connectionLostTimeInSeconds * 1000);
+          // If the device is more than 30 seconds away, set to offline
+          if (deltaLastseenTimestamp > this.connectionLostIntervalTimeInSeconds*1000) { 
+            await this.setCapabilityValue('espresense_status_capability', 'offline');
+          }
 
+          let flowDuration = 0;
+          const flowArguments = await this.whenDeviceIsNoLongerDetectedWithinXMinutesCard?.getArgumentValues(this);
+          if (flowArguments && flowArguments.length > 0) {
+            flowDuration = flowArguments[0].duration;
+          }
+
+          // Run device not responding card if the duration has passed
+          if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) { 
+            // Kill timer
+            clearInterval(this.timer);
+            this.timer = undefined;
+
+            // Call trigger
+            await this.whenDeviceIsNoLongerDetectedWithinXMinutesCard?.trigger(this, undefined, {
+               deviceId: device.id,
+               lastseenTimestamp: this.lastseenTimestamp,
+               duration: deltaLastseenTimestamp
+            })
+          }
+        }
+      }, this.connectionLostIntervalTimeInSeconds * 1000);
     }
   }
 

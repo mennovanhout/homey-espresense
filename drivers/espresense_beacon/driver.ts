@@ -6,14 +6,20 @@ import { ESPresenseApp } from '../../app';
 class ESPresenseBeaconDriver extends Homey.Driver {
   private client?: ESPresenseClient = (this.homey.app as ESPresenseApp).client;
 
+  private whenDeviceIsNoLongerDetectedWithinXMinutesCard: FlowCardTriggerDevice|undefined;
   private whenDeviceIsDetectedAfterXMinutesCard: FlowCardTriggerDevice|undefined;
   
   async onInit() {
     this.log('ESPresenseBeaconDriver has been initialized');
 
+     this.whenDeviceIsNoLongerDetectedWithinXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-no-longer-detected');
+     this.whenDeviceIsNoLongerDetectedWithinXMinutesCard.registerRunListener(async (args: any, state: any) => {
+       return true;
+     });
+
     this.whenDeviceIsDetectedAfterXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-detected-after-x-minutes');
     this.whenDeviceIsDetectedAfterXMinutesCard.registerRunListener(async (args: any, state: any) => {
-      return state.duration > args.duration * 60 * 1000; // Convert minutes to ms
+      return true;
     });
   }
   

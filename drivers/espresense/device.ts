@@ -73,12 +73,12 @@ class ESPresenseNodeDevice extends Homey.Device {
 
     if (roomProperty == 'max_distance' && roomPayload) {
       await this.setCapabilityValue('espresense_max_distance_capability', parseFloat(roomPayload));
-      this.log("Room:", roomId, "max_distance:", roomPayload);
+      //this.log("Room:", roomId, "max_distance:", roomPayload);
     }
 
     if (roomProperty == 'status' && roomPayload) {
       await this.setCapabilityValue('espresense_status_capability', roomPayload);
-      this.log("Room:", roomId, "status:", roomPayload);
+      //this.log("Room:", roomId, "status:", roomPayload);
     }
   }
 

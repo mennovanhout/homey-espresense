@@ -58,7 +58,7 @@ export class ESPresenseClient extends MQTTClient {
     const room = this.rooms[id];
     if (room) {
       room.name = name;
-      this.logMessage(LogLevel.Debug, `Room renamed to ${room.name}`);
+      this.logMessage(LogLevel.Debug, `Room ${id} renamed to ${room.name}`);
     }
   }
 
@@ -66,7 +66,7 @@ export class ESPresenseClient extends MQTTClient {
     const device = this.devices[id];
     if (device) {
       device.name = name;
-      this.logMessage(LogLevel.Debug, `Device renamed to ${device.name}`);
+      this.logMessage(LogLevel.Debug, `Device ${id} renamed to ${device.name}`);
     }
   }
 
