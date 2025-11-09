@@ -1,0 +1,46 @@
+{
+  "triggers": [
+    {
+      "id": "beacon-when-device-is-no-longer-detected",
+      "title": {
+        "en": "When device is not detected within x minutes"
+      },
+      "titleFormatted": {
+        "en": "When device is not detected within [[duration]] minutes"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "duration",
+          "placeholder": {
+            "en": "duration"
+          },
+          "min": 1,
+          "max": 60,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "beacon-when-device-is-detected-after-x-minutes",
+      "title": {
+        "en": "When device is detected again after x minutes"
+      },
+      "titleFormatted": {
+        "en": "When device is detected again after [[duration]] minutes"
+      },
+      "args": [
+        {
+          "type": "number",
+          "name": "duration",
+          "placeholder": {
+            "en": "duration"
+          },
+          "min": 1,
+          "max": 60,
+          "step": 1
+        }
+      ]
+    }
+  ]
+}
