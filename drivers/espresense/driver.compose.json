@@ -7,6 +7,16 @@
     "espresense_max_distance_capability",
     "espresense_status_capability"
   ],
+  "capabilitiesOptions": {
+    "espresense_status_capability" : {
+      "titleTrue": {
+        "en": "Online"
+      },
+      "titleFalse": {
+        "en": "Offline"
+      }
+    }
+  },
   "platforms": [
     "local"
   ],

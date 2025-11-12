@@ -96,7 +96,7 @@ class ESPresenseNodeDevice extends Homey.Device {
     }
 
     if (roomProperty == 'status' && roomPayload) {
-      await this.setCapabilityValue('espresense_status_capability', roomPayload);
+      await this.setCapabilityValue('espresense_status_capability', roomPayload == 'online');
       //this.log("Room:", roomId, "status:", roomPayload);
     }
   }

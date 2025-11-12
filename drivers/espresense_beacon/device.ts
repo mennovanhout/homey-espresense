@@ -97,7 +97,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
       }
 
       // We have data, set status online
-      await this.setCapabilityValue('espresense_status_capability', 'online');
+      await this.setCapabilityValue('espresense_status_capability', true);
       
       const currentRoomId = await this.getCapabilityValue('espresense_beacon_room');
       const currentDistance = await this.getCapabilityValue('espresense_distance_capability');
@@ -150,7 +150,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
 
           // If the device is more than 30 seconds away, set to offline
           if (deltaLastseenTimestamp > this.connectionLostIntervalTimeInSeconds*1000) { 
-            await this.setCapabilityValue('espresense_status_capability', 'offline');
+            await this.setCapabilityValue('espresense_status_capability', false);
           }
 
           let flowDuration = 0;
