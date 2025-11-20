@@ -116,7 +116,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
           const room = this.client?.rooms[deviceRoomId];
           if (room) {
             await this.setCapabilityValue('espresense_beacon_room', room.id);  
-            await this.setCapabilityValue('espresense_beacon_roomname', room.name);  
+            await this.setCapabilityValue('espresense_beacon_roomname', room.name);
           }
         }
 
