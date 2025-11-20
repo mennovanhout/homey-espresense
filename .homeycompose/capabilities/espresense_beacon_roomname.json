@@ -1,10 +1,10 @@
 {
   "type": "string",
   "title": { 
-    "en": "Room ID",
-    "nl": "Ruimte ID" 
+    "en": "Room",
+    "nl": "Ruimte"
   },
-  "uiComponent": null,
+  "uiComponent": "sensor",
   "getable": true,
   "setable": false,
   "icon": "assets/icons/room.svg",

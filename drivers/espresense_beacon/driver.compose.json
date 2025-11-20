@@ -5,6 +5,7 @@
   "class": "other",
   "capabilities": [
     "espresense_beacon_room",
+    "espresense_beacon_roomname",
     "espresense_distance_capability",
     "espresense_status_capability"
   ],

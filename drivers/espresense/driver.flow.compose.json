@@ -3,24 +3,27 @@
     {
       "id": "when-device-is-closer-than-x-meters",
       "title": {
-        "en": "When device is closer than x meters"
+        "en": "When beacon is closer than x meters",
+        "nl": "Als beacon dichter bij is dan x meter"
       },
       "titleFormatted": {
-        "en": "When device [[deviceId]] is closer than [[distance]] meters"
+        "en": "When beacon [[deviceId]] is closer than [[distance]] meters",
+        "nl": "Als beacon [[deviceId]] dichter bij is dan [[distance]] meter"
       },
       "args": [
         {
           "type": "autocomplete",
           "name": "deviceId",
           "placeholder": {
-            "en": "device"
+            "en": "Beacon"
           }
         },
         {
           "type": "number",
           "name": "distance",
           "placeholder": {
-            "en": "distance"
+            "en": "Distance",
+            "nl": "Afstand"
           },
           "min": 0,
           "max": 16,
@@ -32,7 +35,8 @@
           "type": "number",
           "name": "device-distance",
           "title": {
-            "en": "Device distance"
+            "en": "Beacon distance",
+            "nl": "Beacon afstand"
           },
           "example": {
             "en": "1.2"
@@ -43,24 +47,27 @@
     {
       "id": "when-device-is-further-than-x-meters",
       "title": {
-        "en": "When device is further than x meters"
+        "en": "When beacon is further than x meters",
+        "nl": "Als beacon verder is dan x meter"
       },
       "titleFormatted": {
-        "en": "When device [[deviceId]] is further than [[distance]] meters"
+        "en": "When device [[deviceId]] is further than [[distance]] meters",
+        "nl": "Als beacon [[deviceId]] verder is dan [[distance]] meter"
       },
       "args": [
         {
           "type": "autocomplete",
           "name": "deviceId",
           "placeholder": {
-            "en": "device"
+            "en": "Beacon"
           }
         },
         {
           "type": "number",
           "name": "distance",
           "placeholder": {
-            "en": "distance"
+            "en": "Distance",
+            "nl": "Afstand"
           },
           "min": 0,
           "max": 16,
@@ -72,7 +79,8 @@
           "type": "number",
           "name": "device-distance",
           "title": {
-            "en": "Device distance"
+            "en": "Beacon distance",
+            "nl": "Beacon afstand"
           },
           "example": {
             "en": "1.2"
@@ -83,17 +91,19 @@
     {
       "id": "when-device-is-no-longer-detected",
       "title": {
-        "en": "When device is no longer detected"
+        "en": "When beacon is no longer detected",
+        "nl": "Als beacon niet meer is gedetecteerd"
       },
       "titleFormatted": {
-        "en": "When device [[deviceId]] is no longer detected"
+        "en": "When beacon [[deviceId]] is no longer detected",
+        "nl": "Als beacon [[deviceId]] niet meer is gedetecteerd"
       },
       "args": [
         {
           "type": "autocomplete",
           "name": "deviceId",
           "placeholder": {
-            "en": "device"
+            "en": "Beacon"
           }
         }
       ]

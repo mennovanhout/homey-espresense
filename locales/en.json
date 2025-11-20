@@ -1,1 +1,20 @@
-{}
+{
+  "Settings": {
+    "Title": "ESPresense settings",
+    "MQTTBroker": {
+      "Title": "MQTT Broker",
+      "Server": "Server",
+      "Port": "Port",
+      "Username": "Username",
+      "Password": "Password"
+    },
+    "Mapping": {
+      "Title": "Mapping",
+      "ESPresenseID": "ESPresense ID",
+      "Displayname": "Display Name"
+    },
+    "btnAddMapping":"Add mapping",
+    "btnSave":"Save changes",
+    "msgSaved":"Settings saved!"
+  }
+}

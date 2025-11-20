@@ -25,6 +25,9 @@ class ESPresenseBeaconDevice extends Homey.Device {
     if (!this.hasCapability('espresense_beacon_room')) {
       await this.addCapability('espresense_beacon_room');
     }
+    if (!this.hasCapability('espresense_beacon_roomname')) {
+      await this.addCapability('espresense_beacon_roomname');
+    }
     if (!this.hasCapability('espresense_distance_capability')) {
       await this.addCapability('espresense_distance_capability');
     }
@@ -106,10 +109,16 @@ class ESPresenseBeaconDevice extends Homey.Device {
         // Same room, update distance
         await this.setCapabilityValue('espresense_distance_capability', device.distance);
         //this.log("Beacon, update distance:", deviceId, deviceRoomId, "distance:", device.distance);
-      } else if (!currentDistance || device.distance < currentDistance) {
+      } else if (device.distance && (!currentDistance || (device.distance < currentDistance))) {
         // Nearest Room
-        await this.setCapabilityValue('espresense_beacon_room', deviceRoomId);  
-        //await this.setCapabilityOptions('espresense_beacon_room', { title: {"en": `${device.name}` } });
+        if (deviceRoomId) {
+          // Get Room 
+          const room = this.client?.rooms[deviceRoomId];
+          if (room) {
+            await this.setCapabilityValue('espresense_beacon_room', room.id);  
+            await this.setCapabilityValue('espresense_beacon_roomname', room.name);  
+          }
+        }
 
         await this.setCapabilityValue('espresense_distance_capability', device.distance);
         //this.log("Beacon, update room:", deviceId, deviceRoomId, "distance:", device.distance);

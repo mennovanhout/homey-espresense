@@ -3,17 +3,20 @@
     {
       "id": "beacon-when-device-is-no-longer-detected",
       "title": {
-        "en": "When device is not detected within x minutes"
+        "en": "When beacon is not detected within x minutes",
+        "nl": "Als beacon niet meer binnen x minuten is gedetecteerd"
       },
       "titleFormatted": {
-        "en": "When device is not detected within [[duration]] minutes"
+        "en": "When beacon is not detected within [[duration]] minutes",
+        "nl": "Als beacon niet meer binnen [[duration]] minuten is gedetecteerd"
       },
       "args": [
         {
           "type": "number",
           "name": "duration",
           "placeholder": {
-            "en": "duration"
+            "en": "Duration",
+            "nl": "Duur"
           },
           "min": 1,
           "max": 60,
@@ -24,17 +27,20 @@
     {
       "id": "beacon-when-device-is-detected-after-x-minutes",
       "title": {
-        "en": "When device is detected again after x minutes"
+        "en": "When beacon is detected again after x minutes",
+        "nl": "Als beacon weer is gedetecteerd na x minuten"
       },
       "titleFormatted": {
-        "en": "When device is detected again after [[duration]] minutes"
+        "en": "When beacon is detected again after [[duration]] minutes",
+        "nl": "Als beacon weer is gedetecteerd na [[duration]] minuten"
       },
       "args": [
         {
           "type": "number",
           "name": "duration",
           "placeholder": {
-            "en": "duration"
+            "en": "Duration",
+            "nl": "Duur"
           },
           "min": 1,
           "max": 60,
