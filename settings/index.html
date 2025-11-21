@@ -7,46 +7,45 @@
 </head>
 <body>
 <header class="homey-header">
-    <h1 class="homey-title">
-        ESPresense settings
-    </h1>
+    <h1 class="homey-title" data-i18n="Settings.Title"></h1>
     <fieldset class="homey-form-fieldset">
-        <legend class="homey-form-legend">MQTT</legend>
+        <legend class="homey-form-legend" data-i18n="Settings.MQTTBroker.Title"></legend>
 
         <div class="homey-form-group">
-            <label class="homey-form-label" for="server">Server</label>
+            <label class="homey-form-label" for="server" data-i18n="Settings.MQTTBroker.Server"></label>
             <input class="homey-form-input" id="server" type="text" value="" />
         </div>
         <div class="homey-form-group">
-            <label class="homey-form-label" for="port">Port</label>
+            <label class="homey-form-label" for="port" data-i18n="Settings.MQTTBroker.Port"></label>
             <input class="homey-form-input" id="port" type="text" value="" />
         </div>
         <div class="homey-form-group">
-            <label class="homey-form-label" for="username">Username</label>
+            <label class="homey-form-label" for="username" data-i18n="Settings.MQTTBroker.Username"></label>
             <input class="homey-form-input" id="username" type="text" value="" />
         </div>
         <div class="homey-form-group">
-            <label class="homey-form-label" for="password">Password</label>
+            <label class="homey-form-label" for="password" data-i18n="Settings.MQTTBroker.Password"></label>
             <input class="homey-form-input" id="password" type="password" value="" />
         </div>
 
-        <legend class="homey-form-legend">Mapping</legend>
+        <legend class="homey-form-legend" data-i18n="Settings.Mapping.Title"></legend>
+
         <div class="mappings">
             <div class="entry">
                 <div class="homey-form-group">
-                    <label class="homey-form-label">ESPresense ID</label>
+                    <label class="homey-form-label" data-i18n="Settings.Mapping.ESPresenseID"></label>
                     <input class="homey-form-input espresense_id" type="text" value="" />
                 </div>
                 <div class="homey-form-group">
-                    <label class="homey-form-label">Usable name</label>
+                    <label class="homey-form-label" data-i18n="Settings.Mapping.Displayname"></label>
                     <input class="homey-form-input usable_name" type="text" value="" />
                 </div>
             </div>
         </div>
     </fieldset>
 
-    <button id="add_mapping" class="homey-button-secondary-full">Add mapping</button>
-    <button id="save" class="homey-button-primary-full">Save changes</button>
+    <button id="add_mapping" class="homey-button-secondary-full" data-i18n="Settings.btnAddMapping"></button>
+    <button id="save" class="homey-button-primary-full" data-i18n="Settings.btnSave"></button>
 </header>
 <script type="text/javascript">
   function onHomeyReady(Homey) {
@@ -92,11 +91,11 @@
 
       Object.keys(mapping).forEach(function (value, index) {
         mappingsElement.insertAdjacentHTML( 'afterbegin', '<div class="entry"><div class="homey-form-group">\n' +
-          '                <label class="homey-form-label">ESPresense ID</label>\n' +
+          '                <label class="homey-form-label">' + Homey.__("Settings.Mapping.ESPresenseID") + '</label>\n' +
           '                <input class="homey-form-input espresense_id" type="text" value="'+value+'" />\n' +
           '            </div>\n' +
           '            <div class="homey-form-group">\n' +
-          '                <label class="homey-form-label">Usable name</label>\n' +
+          '                <label class="homey-form-label">' + Homey.__("Settings.Mapping.Displayname") + '</label>\n' +
           '                <input class="homey-form-input usable_name" type="text" value="'+mapping[value]+'" />\n' +
           '            </div></div>' );
       });
@@ -105,11 +104,11 @@
     // Add mapping button
     addMappingElement.addEventListener("click", function (e) {
       mappingsElement.insertAdjacentHTML( 'beforeend', '<div class="entry"><div class="homey-form-group">\n' +
-        '                <label class="homey-form-label">ESPresense ID</label>\n' +
+        '                <label class="homey-form-label">' + Homey.__("Settings.Mapping.ESPresenseID") + '</label>\n' +
         '                <input class="homey-form-input espresense_id" type="text" value="" />\n' +
         '            </div>\n' +
         '            <div class="homey-form-group">\n' +
-        '                <label class="homey-form-label">Usable name</label>\n' +
+        '                <label class="homey-form-label">' + Homey.__("Settings.Mapping.Displayname") + '</label>\n' +
         '                <input class="homey-form-input usable_name" type="text" value="" />\n' +
         '            </div></div>' );
     });
@@ -146,7 +145,7 @@
         if (err) return Homey.alert(err);
       });
 
-      Homey.alert('Settings saved!');
+      Homey.alert(Homey.__("Settings.msgSaved"));
 
       // Trigger saved settings
       Homey.set('saved', true); 

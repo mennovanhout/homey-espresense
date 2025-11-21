@@ -1,0 +1,20 @@
+{
+  "Settings": {
+    "Title": "ESPresense instellingen",
+    "MQTTBroker": {
+      "Title": "MQTT Broker",
+      "Server": "Server",
+      "Port": "Poort",
+      "Username": "Gebruikersnaam",
+      "Password": "Wachtwoord"
+    },
+    "Mapping": {
+      "Title": "Koppelingen",
+      "ESPresenseID": "ESPresense ID",
+      "Displayname": "Weergavenaam"
+    },
+    "btnAddMapping":"Koppeling toevoegen",
+    "btnSave":"Wijzigingen opslaan",
+    "msgSaved":"De wijzigingen zijn opgeslagen!"
+  }
+}

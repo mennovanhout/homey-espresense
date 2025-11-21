@@ -1,6 +1,9 @@
 {
   "type": "number",
-  "title": { "en": "Max distance" },
+  "title": { 
+    "en": "Max distance",
+    "nl": "Max afstand" 
+  },
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,

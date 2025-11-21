@@ -18,6 +18,9 @@
     "en": "Add device name in sensor instead of distance"
   },
   "1.0.8": {
-    "en": "new flow card"
+    "en": "New flow card"
+  },
+  "1.1.0": {
+    "en": "Added support for Beacons"
   }
 }
