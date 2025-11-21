@@ -1,6 +1,6 @@
 {
   "id": "nl.mennovanhout.espresense",
-  "version": "1.0.8",
+  "version": "1.1.0",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -10,7 +10,8 @@
     "en": "ESPresense"
   },
   "description": {
-    "en": "Make personalised flows with ESPresense"
+    "en": "Make personalised flows with ESPresense",
+    "nl": "Maak gepersonaliseerde flows met ESPresense"
   },
   "category": [
     "tools"
@@ -29,6 +30,14 @@
   "homepage": "https://hdashboards.app",
   "support": "https://hdashboards.app",
   "source": "https://github.com/mennovanhout/homey-espresense",
+  "contributors": {
+    "developers": [
+      {
+        "name": "Michel Hoek",
+        "email": "mahoek@gmail.com"
+      }
+    ]
+  },
   "contributing": {
     "donate": {
       "bunq": {

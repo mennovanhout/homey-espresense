@@ -9,14 +9,25 @@ export interface ESPresenseDevice {
   id: string,
   name: string,
   anonymous: boolean;
-  idType: number,
-  distance: number,
-  mac: string,
-  'rssi@1m': number,
-  rssi: number,
-  raw: number,
-  var: number,
-  int: number
+  idType?: number,
+  distance?: number,
+  mac?: string,
+  'rssi@1m'?: number,
+  rssi?: number,
+  raw?: number,
+  var?: number,
+  int?: number
+}
+
+// Online support Online & Offline
+export namespace ESPresenseStatus {
+  export const Online = true;
+  export const Offline = false;
+
+  export function fromValue(value: any): boolean {
+    if (value == 'online') return ESPresenseStatus.Online;
+    return ESPresenseStatus.Offline;
+  }
 }
 
 export type DeviceMessageFunction = (deviceId: string, deviceRoomId: string, device?: ESPresenseDevice) => void;

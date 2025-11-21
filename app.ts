@@ -27,6 +27,9 @@ export class ESPresenseApp extends Homey.App {
 
     this.client = new ESPresenseClient(this.ESPresenseClientOptions);
     this.client.connect();
+
+    // Register Legacy Mappings
+    await this.registerMappings();
   }
 
   async updateSettings() {
@@ -41,15 +44,19 @@ export class ESPresenseApp extends Homey.App {
 
       this.client.setOptions(this.ESPresenseClientOptions);
 
-      // Use Legacy mapping for device names
-      const mapping = this.homey.settings.get('mapping');
-      if (mapping) {
-        for (const key in mapping) {
-          this.client.registerDevice(key, mapping[key]);
-        }
-      }
+      await this.registerMappings();
 
       this.client.connect();
+    }
+  }
+
+  async registerMappings() {
+    // Use Legacy mapping for device names
+    const mapping = this.homey.settings.get('mapping');
+    if (this.client && mapping) {
+      for (const key in mapping) {
+        this.client.registerDevice(key, mapping[key]);
+      }
     }
   }
 

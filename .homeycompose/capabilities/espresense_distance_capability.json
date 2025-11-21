@@ -1,6 +1,9 @@
 {
   "type": "number",
-  "title": { "en": "Distance" },
+  "title": { 
+    "en": "Distance",
+    "nl": "Afstand"
+  },
   "uiComponent": "sensor",
   "getable": true,
   "setable": false,
