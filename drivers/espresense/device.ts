@@ -1,6 +1,6 @@
 import Homey, { FlowCardTriggerDevice } from 'homey';
 import { ESPresenseClient } from '../../lib/classes/espresense'
-import { ESPresenseDevice, ESPresenseRoom, DeviceMessageFunction, RoomMessageFunction } from '../../lib/types/espresense';
+import { ESPresenseDevice, ESPresenseRoom, DeviceMessageFunction, RoomMessageFunction, ESPresenseStatus } from '../../lib/types/espresense';
 import { ESPresenseApp } from '../../app';
 
 class ESPresenseNodeDevice extends Homey.Device {
@@ -96,7 +96,7 @@ class ESPresenseNodeDevice extends Homey.Device {
     }
 
     if (roomProperty == 'status' && roomPayload) {
-      await this.setCapabilityValue('espresense_status_capability', roomPayload);
+      await this.setCapabilityValue('espresense_status_capability', ESPresenseStatus.fromValue(roomPayload)); 
       //this.log("Room:", roomId, "status:", roomPayload);
     }
   }

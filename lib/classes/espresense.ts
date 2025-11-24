@@ -69,6 +69,16 @@ export class ESPresenseClient extends MQTTClient {
       device.name = name;
       device.anonymous = false;
       this.logMessage(LogLevel.Debug, `Device ${id} renamed to ${device.name}`);
+    } else {
+      // Add if not existed, this is for the legacy mapped devices
+      let newDevice : ESPresenseDevice;
+      newDevice = {
+        id: id, 
+        name: name, 
+        anonymous: false
+      };
+      this.devices[id] = newDevice;
+      this.logMessage(LogLevel.Debug, `Added mapped device ${id}, ${name}`);
     }
   }
 
