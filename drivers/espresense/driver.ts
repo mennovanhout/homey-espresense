@@ -12,13 +12,13 @@ class ESPresenseNodeDriver extends Homey.Driver {
   private whenDeviceIsNoLongerDetectedCard: FlowCardTriggerDevice|undefined;
 
   async deviceAutocompleteListener(query: string, args: any): Promise<FlowCard.ArgumentAutocompleteResults> {
-    if (this.client) {
-      const suggestions = Object.entries(this.client.devices).map(([key, device]) => {
-        return {
-         id: device.id,
-         name: device.name
-        };
-      });
+    if (this.client && query) {
+      const suggestions = Object.values(this.client.devices)
+        .filter(device => !device.anonymous) // Remove the anonymous devices
+        .map(device => ({
+          id: device.id,
+          name: device.name ?? device.id // Use the id as name, if there is no name specified
+      }));
 
       return suggestions.filter((item) =>
         item.name.toLowerCase().includes(query.toLowerCase())
