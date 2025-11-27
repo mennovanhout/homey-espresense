@@ -28,7 +28,7 @@ class ESPresenseBeaconDriver extends Homey.Driver {
       const deviceEntries = Object.entries(this.client.devices);
       return Promise.resolve(
         deviceEntries.map(([deviceId, device]) => ({
-          name: device.id,
+          name: device.name ?? device.id,
           data: {
             id: deviceId,
           },

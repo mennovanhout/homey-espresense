@@ -22,5 +22,8 @@
   },
   "1.1.0": {
     "en": "Added support for Beacons"
+  },
+  "1.1.1": {
+    "en": "Fixed flow autocomplete issues"
   }
 }
