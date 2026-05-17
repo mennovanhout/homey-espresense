@@ -47,6 +47,97 @@
           "step": 1
         }
       ]
+    },
+    {
+      "id": "beacon-when-room-changes",
+      "title": {
+        "en": "When beacon changes room",
+        "nl": "Als beacon van ruimte wisselt"
+      },
+      "titleFormatted": {
+        "en": "When beacon changes room",
+        "nl": "Als beacon van ruimte wisselt"
+      },
+      "tokens": [
+        {
+          "type": "string",
+          "name": "room-name",
+          "title": {
+            "en": "New room",
+            "nl": "Nieuwe ruimte"
+          },
+          "example": {
+            "en": "Bedroom front"
+          }
+        },
+        {
+          "type": "string",
+          "name": "room-id",
+          "title": {
+            "en": "New room ID",
+            "nl": "Nieuwe ruimte ID"
+          },
+          "example": {
+            "en": "bedroom-front"
+          }
+        },
+        {
+          "type": "string",
+          "name": "previous-room-name",
+          "title": {
+            "en": "Previous room",
+            "nl": "Vorige ruimte"
+          },
+          "example": {
+            "en": "Storage 1"
+          }
+        },
+        {
+          "type": "string",
+          "name": "previous-room-id",
+          "title": {
+            "en": "Previous room ID",
+            "nl": "Vorige ruimte ID"
+          },
+          "example": {
+            "en": "storage-1"
+          }
+        },
+        {
+          "type": "number",
+          "name": "distance",
+          "title": {
+            "en": "Distance",
+            "nl": "Afstand"
+          },
+          "example": {
+            "en": "1.2"
+          }
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "beacon-is-in-room",
+      "title": {
+        "en": "Closest node is room",
+        "nl": "Dichtstbijzijnde node is ruimte"
+      },
+      "titleFormatted": {
+        "en": "Closest node is [[roomId]]",
+        "nl": "Dichtstbijzijnde node is [[roomId]]"
+      },
+      "args": [
+        {
+          "type": "autocomplete",
+          "name": "roomId",
+          "placeholder": {
+            "en": "Room",
+            "nl": "Ruimte"
+          }
+        }
+      ]
     }
   ]
 }
