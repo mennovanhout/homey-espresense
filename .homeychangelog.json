@@ -25,5 +25,8 @@
   },
   "1.1.1": {
     "en": "Fixed flow autocomplete issues"
+  },
+  "1.2.0": {
+    "en": "New flow cards, beacon changed rooms, beacon is in room"
   }
 }
