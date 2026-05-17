@@ -12,8 +12,9 @@ class ESPresenseBeaconDevice extends Homey.Device {
 
   private whenDeviceIsNoLongerDetectedWithinXMinutesCard: FlowCardTriggerDevice|undefined;
   private whenDeviceIsDetectedAfterXMinutesCard: FlowCardTriggerDevice|undefined;
-  
-  private timer?: NodeJS.Timeout;
+  private whenRoomChangesCard: FlowCardTriggerDevice|undefined;
+
+  private timer?: ReturnType<typeof setInterval>;
   private connectionLostIntervalTimeInSeconds = 30;
 
   private boundDeviceMessageHandler? : DeviceMessageFunction;
@@ -41,7 +42,8 @@ class ESPresenseBeaconDevice extends Homey.Device {
     // Flows
     this.whenDeviceIsNoLongerDetectedWithinXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-no-longer-detected');
     this.whenDeviceIsDetectedAfterXMinutesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-device-is-detected-after-x-minutes');
-    
+    this.whenRoomChangesCard = this.homey.flow.getDeviceTriggerCard('beacon-when-room-changes');
+
     await this.register();
   }
 
@@ -58,7 +60,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
     if (mapping) {
       deviceName = mapping[this.deviceId];
     }
-    
+
     if (!deviceName) {
       deviceName = name;
     }
@@ -70,7 +72,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
     this.boundDeviceMessageHandler = this.deviceMessageHandler.bind(this);
     this.client?.on('deviceMessage', this.boundDeviceMessageHandler);
     this.boundRoomMessageHandler = this.roomMessageHandler.bind(this);
-    this.client?.on('roomMessage', this.boundRoomMessageHandler); 
+    this.client?.on('roomMessage', this.boundRoomMessageHandler);
   }
 
   async unRegister() {
@@ -85,11 +87,53 @@ class ESPresenseBeaconDevice extends Homey.Device {
   }
 
   async roomMessageHandler(roomId: string, roomProperty?: string, roomPayload? : string) {
-    return; 
+    const currentRoomId = await this.getCapabilityValue('espresense_beacon_room');
+    const currentRoomName = await this.getCapabilityValue('espresense_beacon_roomname');
+    const roomName = this.client?.rooms[roomId]?.name;
+
+    if (currentRoomId === roomId && roomName && currentRoomName !== roomName) {
+      await this.setCapabilityValue('espresense_beacon_roomname', roomName);
+    }
+  }
+
+  private hasValidDistance(distance?: number): distance is number {
+    return typeof distance === 'number' && Number.isFinite(distance);
+  }
+
+  private getRoomName(roomId?: string | null): string {
+    if (!roomId) {
+      return '';
+    }
+
+    return this.client?.rooms[roomId]?.name || roomId;
+  }
+
+  private async setBeaconRoom(deviceRoomId: string, distance: number): Promise<void> {
+    const currentRoomId = await this.getCapabilityValue('espresense_beacon_room');
+    const newRoomName = this.getRoomName(deviceRoomId);
+
+    await this.setCapabilityValue('espresense_beacon_room', deviceRoomId);
+    await this.setCapabilityValue('espresense_beacon_roomname', newRoomName);
+    await this.setCapabilityValue('espresense_distance_capability', distance);
+
+    if (currentRoomId && currentRoomId !== deviceRoomId) {
+      await this.whenRoomChangesCard?.trigger(this, {
+        'room-id': deviceRoomId,
+        'room-name': newRoomName,
+        'previous-room-id': currentRoomId,
+        'previous-room-name': this.getRoomName(currentRoomId),
+        'distance': distance,
+      }, {
+        deviceId: this.deviceId,
+        roomId: deviceRoomId,
+        previousRoomId: currentRoomId,
+        distance,
+      });
+    }
   }
 
   async deviceMessageHandler(deviceId: string, deviceRoomId?: string, device?: ESPresenseDevice) {
-    if (this.deviceId != deviceId) {
+    if (this.deviceId !== deviceId) {
       return;
     }
 
@@ -101,27 +145,21 @@ class ESPresenseBeaconDevice extends Homey.Device {
 
       // We have data, set status online
       await this.setCapabilityValue('espresense_status_capability', ESPresenseStatus.Online);
-      
+
       const currentRoomId = await this.getCapabilityValue('espresense_beacon_room');
       const currentDistance = await this.getCapabilityValue('espresense_distance_capability');
+      const deviceDistance = device.distance;
 
-      if (currentRoomId == deviceRoomId) {
-        // Same room, update distance
-        await this.setCapabilityValue('espresense_distance_capability', device.distance);
-        //this.log("Beacon, update distance:", deviceId, deviceRoomId, "distance:", device.distance);
-      } else if (device.distance && (!currentDistance || (device.distance < currentDistance))) {
-        // Nearest Room
-        if (deviceRoomId) {
-          // Get Room 
-          const room = this.client?.rooms[deviceRoomId];
-          if (room) {
-            await this.setCapabilityValue('espresense_beacon_room', room.id);  
-            await this.setCapabilityValue('espresense_beacon_roomname', room.name);
-          }
+      if (this.hasValidDistance(deviceDistance)) {
+        if (currentRoomId === deviceRoomId) {
+          // Same room, update distance
+          await this.setCapabilityValue('espresense_distance_capability', deviceDistance);
+          //this.log("Beacon, update distance:", deviceId, deviceRoomId, "distance:", deviceDistance);
+        } else if (deviceRoomId && (!this.hasValidDistance(currentDistance) || (deviceDistance < currentDistance))) {
+          // Nearest Room
+          await this.setBeaconRoom(deviceRoomId, deviceDistance);
+          //this.log("Beacon, update room:", deviceId, deviceRoomId, "distance:", deviceDistance);
         }
-
-        await this.setCapabilityValue('espresense_distance_capability', device.distance);
-        //this.log("Beacon, update room:", deviceId, deviceRoomId, "distance:", device.distance);
       }
 
       // Reactivated device
@@ -135,13 +173,13 @@ class ESPresenseBeaconDevice extends Homey.Device {
           flowDuration = flowArguments[0].duration;
         }
 
-        if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) { 
-           // Run device active again card
-           await this.whenDeviceIsDetectedAfterXMinutesCard?.trigger(this, undefined, {
-             deviceId: device.id,
-             lastseenTimestamp: this.lastseenTimestamp,
-             duration: deltaLastseenTimestamp
-           });
+        if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) {
+          // Run device active again card
+          await this.whenDeviceIsDetectedAfterXMinutesCard?.trigger(this, undefined, {
+            deviceId: device.id,
+            lastseenTimestamp: this.lastseenTimestamp,
+            duration: deltaLastseenTimestamp
+          });
         }
       }
       this.lastseenTimestamp = currentTimestamp
@@ -158,7 +196,7 @@ class ESPresenseBeaconDevice extends Homey.Device {
           const deltaLastseenTimestamp = currentTimestamp - this.lastseenTimestamp;
 
           // If the device is more than 30 seconds away, set to offline
-          if (deltaLastseenTimestamp > this.connectionLostIntervalTimeInSeconds*1000) { 
+          if (deltaLastseenTimestamp > this.connectionLostIntervalTimeInSeconds*1000) {
             await this.setCapabilityValue('espresense_status_capability', ESPresenseStatus.Offline);
           }
 
@@ -169,16 +207,16 @@ class ESPresenseBeaconDevice extends Homey.Device {
           }
 
           // Run device not responding card if the duration has passed
-          if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) { 
+          if (flowDuration >= 1 && deltaLastseenTimestamp > flowDuration*60*1000) {
             // Kill timer
             clearInterval(this.timer);
             this.timer = undefined;
 
             // Call trigger
             await this.whenDeviceIsNoLongerDetectedWithinXMinutesCard?.trigger(this, undefined, {
-               deviceId: device.id,
-               lastseenTimestamp: this.lastseenTimestamp,
-               duration: deltaLastseenTimestamp
+              deviceId: device.id,
+              lastseenTimestamp: this.lastseenTimestamp,
+              duration: deltaLastseenTimestamp
             })
           }
         }

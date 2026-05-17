@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "nl.mennovanhout.espresense",
-  "version": "1.0.8",
+  "version": "1.1.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "platforms": [
@@ -11,7 +11,8 @@
     "en": "ESPresense"
   },
   "description": {
-    "en": "Make personalised flows with ESPresense"
+    "en": "Make personalised flows with ESPresense",
+    "nl": "Maak gepersonaliseerde flows met ESPresense"
   },
   "category": [
     "tools"
@@ -30,6 +31,14 @@
   "homepage": "https://hdashboards.app",
   "support": "https://hdashboards.app",
   "source": "https://github.com/mennovanhout/homey-espresense",
+  "contributors": {
+    "developers": [
+      {
+        "name": "Michel Hoek",
+        "email": "mahoek@gmail.com"
+      }
+    ]
+  },
   "contributing": {
     "donate": {
       "bunq": {
@@ -43,10 +52,12 @@
       {
         "id": "when-device-is-closer-than-x-meters",
         "title": {
-          "en": "When device is closer than x meters"
+          "en": "When beacon is closer than x meters",
+          "nl": "Als beacon dichter bij is dan x meter"
         },
         "titleFormatted": {
-          "en": "When device [[deviceId]] is closer than [[distance]] meters"
+          "en": "When beacon [[deviceId]] is closer than [[distance]] meters",
+          "nl": "Als beacon [[deviceId]] dichter bij is dan [[distance]] meter"
         },
         "args": [
           {
@@ -58,14 +69,15 @@
             "type": "autocomplete",
             "name": "deviceId",
             "placeholder": {
-              "en": "device"
+              "en": "Beacon"
             }
           },
           {
             "type": "number",
             "name": "distance",
             "placeholder": {
-              "en": "distance"
+              "en": "Distance",
+              "nl": "Afstand"
             },
             "min": 0,
             "max": 16,
@@ -77,7 +89,8 @@
             "type": "number",
             "name": "device-distance",
             "title": {
-              "en": "Device distance"
+              "en": "Beacon distance",
+              "nl": "Beacon afstand"
             },
             "example": {
               "en": "1.2"
@@ -88,10 +101,12 @@
       {
         "id": "when-device-is-further-than-x-meters",
         "title": {
-          "en": "When device is further than x meters"
+          "en": "When beacon is further than x meters",
+          "nl": "Als beacon verder is dan x meter"
         },
         "titleFormatted": {
-          "en": "When device [[deviceId]] is further than [[distance]] meters"
+          "en": "When device [[deviceId]] is further than [[distance]] meters",
+          "nl": "Als beacon [[deviceId]] verder is dan [[distance]] meter"
         },
         "args": [
           {
@@ -103,14 +118,15 @@
             "type": "autocomplete",
             "name": "deviceId",
             "placeholder": {
-              "en": "device"
+              "en": "Beacon"
             }
           },
           {
             "type": "number",
             "name": "distance",
             "placeholder": {
-              "en": "distance"
+              "en": "Distance",
+              "nl": "Afstand"
             },
             "min": 0,
             "max": 16,
@@ -122,7 +138,8 @@
             "type": "number",
             "name": "device-distance",
             "title": {
-              "en": "Device distance"
+              "en": "Beacon distance",
+              "nl": "Beacon afstand"
             },
             "example": {
               "en": "1.2"
@@ -133,10 +150,12 @@
       {
         "id": "when-device-is-no-longer-detected",
         "title": {
-          "en": "When device is no longer detected"
+          "en": "When beacon is no longer detected",
+          "nl": "Als beacon niet meer is gedetecteerd"
         },
         "titleFormatted": {
-          "en": "When device [[deviceId]] is no longer detected"
+          "en": "When beacon [[deviceId]] is no longer detected",
+          "nl": "Als beacon [[deviceId]] niet meer is gedetecteerd"
         },
         "args": [
           {
@@ -148,7 +167,7 @@
             "type": "autocomplete",
             "name": "deviceId",
             "placeholder": {
-              "en": "device"
+              "en": "Beacon"
             }
           }
         ]
@@ -156,10 +175,12 @@
       {
         "id": "beacon-when-device-is-no-longer-detected",
         "title": {
-          "en": "When device is not detected within x minutes"
+          "en": "When beacon is not detected within x minutes",
+          "nl": "Als beacon niet meer binnen x minuten is gedetecteerd"
         },
         "titleFormatted": {
-          "en": "When device is not detected within [[duration]] minutes"
+          "en": "When beacon is not detected within [[duration]] minutes",
+          "nl": "Als beacon niet meer binnen [[duration]] minuten is gedetecteerd"
         },
         "args": [
           {
@@ -171,7 +192,8 @@
             "type": "number",
             "name": "duration",
             "placeholder": {
-              "en": "duration"
+              "en": "Duration",
+              "nl": "Duur"
             },
             "min": 1,
             "max": 60,
@@ -182,10 +204,12 @@
       {
         "id": "beacon-when-device-is-detected-after-x-minutes",
         "title": {
-          "en": "When device is detected again after x minutes"
+          "en": "When beacon is detected again after x minutes",
+          "nl": "Als beacon weer is gedetecteerd na x minuten"
         },
         "titleFormatted": {
-          "en": "When device is detected again after [[duration]] minutes"
+          "en": "When beacon is detected again after [[duration]] minutes",
+          "nl": "Als beacon weer is gedetecteerd na [[duration]] minuten"
         },
         "args": [
           {
@@ -197,11 +221,115 @@
             "type": "number",
             "name": "duration",
             "placeholder": {
-              "en": "duration"
+              "en": "Duration",
+              "nl": "Duur"
             },
             "min": 1,
             "max": 60,
             "step": 1
+          }
+        ]
+      },
+      {
+        "id": "beacon-when-room-changes",
+        "title": {
+          "en": "When beacon changes room",
+          "nl": "Als beacon van ruimte wisselt"
+        },
+        "titleFormatted": {
+          "en": "When beacon changes room",
+          "nl": "Als beacon van ruimte wisselt"
+        },
+        "tokens": [
+          {
+            "type": "string",
+            "name": "room-name",
+            "title": {
+              "en": "New room",
+              "nl": "Nieuwe ruimte"
+            },
+            "example": {
+              "en": "Bedroom front"
+            }
+          },
+          {
+            "type": "string",
+            "name": "room-id",
+            "title": {
+              "en": "New room ID",
+              "nl": "Nieuwe ruimte ID"
+            },
+            "example": {
+              "en": "bedroom-front"
+            }
+          },
+          {
+            "type": "string",
+            "name": "previous-room-name",
+            "title": {
+              "en": "Previous room",
+              "nl": "Vorige ruimte"
+            },
+            "example": {
+              "en": "Storage 1"
+            }
+          },
+          {
+            "type": "string",
+            "name": "previous-room-id",
+            "title": {
+              "en": "Previous room ID",
+              "nl": "Vorige ruimte ID"
+            },
+            "example": {
+              "en": "storage-1"
+            }
+          },
+          {
+            "type": "number",
+            "name": "distance",
+            "title": {
+              "en": "Distance",
+              "nl": "Afstand"
+            },
+            "example": {
+              "en": "1.2"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=espresense_beacon"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "beacon-is-in-room",
+        "title": {
+          "en": "Closest node is room",
+          "nl": "Dichtstbijzijnde node is ruimte"
+        },
+        "titleFormatted": {
+          "en": "Closest node is [[roomId]]",
+          "nl": "Dichtstbijzijnde node is [[roomId]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=espresense_beacon"
+          },
+          {
+            "type": "autocomplete",
+            "name": "roomId",
+            "placeholder": {
+              "en": "Room",
+              "nl": "Ruimte"
+            }
           }
         ]
       }
@@ -217,6 +345,16 @@
         "espresense_max_distance_capability",
         "espresense_status_capability"
       ],
+      "capabilitiesOptions": {
+        "espresense_status_capability": {
+          "titleTrue": {
+            "en": "Online"
+          },
+          "titleFalse": {
+            "en": "Offline"
+          }
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -257,9 +395,20 @@
       "class": "other",
       "capabilities": [
         "espresense_beacon_room",
+        "espresense_beacon_roomname",
         "espresense_distance_capability",
         "espresense_status_capability"
       ],
+      "capabilitiesOptions": {
+        "espresense_status_capability": {
+          "titleTrue": {
+            "en": "Online"
+          },
+          "titleFalse": {
+            "en": "Offline"
+          }
+        }
+      },
       "platforms": [
         "local"
       ],
@@ -291,18 +440,32 @@
     "espresense_beacon_room": {
       "type": "string",
       "title": {
-        "en": "Room"
+        "en": "Room ID",
+        "nl": "Ruimte ID"
+      },
+      "uiComponent": null,
+      "getable": true,
+      "setable": false,
+      "icon": "assets/icons/room.svg",
+      "insights": false
+    },
+    "espresense_beacon_roomname": {
+      "type": "string",
+      "title": {
+        "en": "Room",
+        "nl": "Ruimte"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": false,
       "icon": "assets/icons/room.svg",
-      "insights": true
+      "insights": false
     },
     "espresense_distance_capability": {
       "type": "number",
       "title": {
-        "en": "Distance"
+        "en": "Distance",
+        "nl": "Afstand"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -315,7 +478,8 @@
     "espresense_max_distance_capability": {
       "type": "number",
       "title": {
-        "en": "Max distance"
+        "en": "Max distance",
+        "nl": "Max afstand"
       },
       "uiComponent": "sensor",
       "getable": true,
@@ -326,28 +490,21 @@
       "icon": "assets/icons/ruler.svg"
     },
     "espresense_status_capability": {
-      "type": "enum",
+      "type": "boolean",
       "title": {
         "en": "Status"
       },
       "uiComponent": "sensor",
       "getable": true,
       "setable": false,
-      "icon": "assets/icons/globe.svg",
-      "values": [
-        {
-          "id": "online",
-          "title": {
-            "en": "Online"
-          }
-        },
-        {
-          "id": "offline",
-          "title": {
-            "en": "Offline"
-          }
-        }
-      ]
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Online"
+      },
+      "insightsTitleFalse": {
+        "en": "Offline"
+      },
+      "icon": "assets/icons/globe.svg"
     }
   }
 }
